@@ -22,6 +22,8 @@ type PaginatedUsersResponse struct {
 type ArmstrongWithUserResponse struct {
 	ArmstrongID uint   `json:"armstrong_id"`
 	Number      string `json:"number"`
+	IsArmstrong bool   `json:"is_armstrong"`
+	UserID      uint   `json:"user_id"`
 	UserName    string `json:"user_name"`
 	UserEmail   string `json:"user_email"`
 	CreatedAt   string `json:"created_at"`
@@ -29,6 +31,9 @@ type ArmstrongWithUserResponse struct {
 
 // ArmstrongResponse represents Armstrong number in API responses
 type ArmstrongResponse struct {
-	Number    string `json:"number"`
-	CreatedAt string `json:"created_at"`
+	ArmstrongID uint   `json:"armstrong_id"`
+	Number      string `json:"number"`
+	IsArmstrong bool   `json:"is_armstrong"`
+	UserID      uint   `json:"user_id"`
+	CreatedAt   string `json:"created_at"`
 }

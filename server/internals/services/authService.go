@@ -26,7 +26,7 @@ func RegisterUser(req *types.RegisterRequest) (*types.AuthResponse, error) {
 
 	// Create new user
 	user := modals.User{
-		Name:     req.Username,
+		Name:     req.Name,
 		Email:    req.Email,
 		Password: string(hashedPassword),
 	}

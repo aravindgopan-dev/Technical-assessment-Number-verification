@@ -92,8 +92,11 @@ func GetUserWithArmstrongNumbers(userID uint) (types.UserResponse, []types.Armst
 	var armstrongResponses []types.ArmstrongResponse
 	for _, armstrong := range armstrongs {
 		armstrongResponses = append(armstrongResponses, types.ArmstrongResponse{
-			Number:    armstrong.Number,
-			CreatedAt: armstrong.CreatedAt.Format("2006-01-02 15:04:05"),
+			ArmstrongID: armstrong.ArmstrongID,
+			Number:      armstrong.Number,
+			IsArmstrong: armstrong.IsArmstrong,
+			UserID:      armstrong.UserID,
+			CreatedAt:   armstrong.CreatedAt.Format("2006-01-02 15:04:05"),
 		})
 	}
 
