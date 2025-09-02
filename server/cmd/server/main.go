@@ -26,6 +26,6 @@ func main() {
 	handler.SetupArmstrongRoutes(api)
 	handler.SetupUserRoutes(api)
 
-	r.Run(":" + os.Getenv("PORT"))
+	r.Run("0.0.0.0:" + os.Getenv("PORT"))
 	fmt.Println("Hello, World!")
 }
