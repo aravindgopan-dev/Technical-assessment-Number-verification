@@ -4,28 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"server/internals/modals"
+	"server/internals/types"
 	"server/pkg"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
-type RegisterRequest struct {
-	Username string `json:"username" binding:"required"`
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
-}
-
-type LoginRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
-}
-
-type AuthResponse struct {
-	Message string       `json:"message"`
-	User    *modals.User `json:"user,omitempty"`
-	Token   string       `json:"token,omitempty"`
-}
-
-func RegisterUser(req *RegisterRequest) (*AuthResponse, error) {
+func RegisterUser(req *types.RegisterRequest) (*types.AuthResponse, error) {
 
 	var existingUser modals.User
 	result := pkg.DB.Where("email = ?", req.Email).First(&existingUser)
@@ -51,7 +36,6 @@ func RegisterUser(req *RegisterRequest) (*AuthResponse, error) {
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
 
-	
 	InvalidateUsersCache()
 
 	// Generate JWT token
@@ -60,7 +44,7 @@ func RegisterUser(req *RegisterRequest) (*AuthResponse, error) {
 		return nil, fmt.Errorf("failed to generate token: %w", err)
 	}
 
-	return &AuthResponse{
+	return &types.AuthResponse{
 		Message: "User registered successfully",
 		User: &modals.User{
 			UserID: user.UserID,
@@ -71,7 +55,7 @@ func RegisterUser(req *RegisterRequest) (*AuthResponse, error) {
 	}, nil
 }
 
-func LoginUser(req *LoginRequest) (*AuthResponse, error) {
+func LoginUser(req *types.LoginRequest) (*types.AuthResponse, error) {
 
 	var user modals.User
 	result := pkg.DB.Where("email = ?", req.Email).First(&user)
@@ -90,7 +74,7 @@ func LoginUser(req *LoginRequest) (*AuthResponse, error) {
 		return nil, fmt.Errorf("failed to generate token: %w", err)
 	}
 
-	return &AuthResponse{
+	return &types.AuthResponse{
 		Message: "User logged in successfully",
 		User: &modals.User{
 			UserID: user.UserID,

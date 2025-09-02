@@ -10,17 +10,26 @@ import (
 )
 
 func GetAllUsers(c *gin.Context) {
-	users, err := services.GetAllUsers()
+	// Parse pagination parameters
+	pageStr := c.DefaultQuery("page", "1")
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid page parameter"})
+		return
+	}
+
+	// Get paginated users (limit is always 10)
+	response, err := services.GetAllUsers(page)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"users": users,
-		"count": len(users),
-	})
+	c.JSON(http.StatusOK, response)
 }
+
+
 
 func GetUser(c *gin.Context) {
 	userIDStr := c.Param("id")

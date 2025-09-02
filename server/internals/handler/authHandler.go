@@ -3,12 +3,13 @@ package handler
 import (
 	"net/http"
 	"server/internals/services"
+	"server/internals/types"
 
 	"github.com/gin-gonic/gin"
 )
 
 func LoginUser(c *gin.Context) {
-	var req services.LoginRequest
+	var req types.LoginRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -24,9 +25,8 @@ func LoginUser(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-
 func RegisterUser(c *gin.Context) {
-	var req services.RegisterRequest
+	var req types.RegisterRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

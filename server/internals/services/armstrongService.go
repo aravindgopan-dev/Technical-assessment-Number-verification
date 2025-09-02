@@ -7,16 +7,18 @@ import (
 )
 
 func VerifyArmstrongNumber(n int, userIdInt int) bool {
-	if !isArmstrong(n) {
-		return false
-	}
+	isArmstrongResult := isArmstrong(n)
 
 	record := &modals.Armstrong{
-		Number: strconv.Itoa(n),
-		UserID: uint(userIdInt),
+		Number:      strconv.Itoa(n),
+		UserID:      uint(userIdInt),
+		IsArmstrong: isArmstrongResult,
 	}
 
-	return pkg.DB.Create(record).Error == nil
+	// Log to database but don't let database errors affect the result
+	pkg.DB.Create(record)
+
+	return isArmstrongResult
 }
 
 func isArmstrong(n int) bool {
