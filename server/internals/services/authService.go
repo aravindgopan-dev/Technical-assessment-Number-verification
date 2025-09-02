@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"server/internals/modals"
 	"server/pkg"
-
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -25,8 +24,6 @@ type AuthResponse struct {
 	User    *modals.User `json:"user,omitempty"`
 	Token   string       `json:"token,omitempty"`
 }
-
-
 
 func RegisterUser(req *RegisterRequest) (*AuthResponse, error) {
 
@@ -53,6 +50,9 @@ func RegisterUser(req *RegisterRequest) (*AuthResponse, error) {
 	if err := pkg.DB.Create(&user).Error; err != nil {
 		return nil, fmt.Errorf("failed to create user: %w", err)
 	}
+
+	
+	InvalidateUsersCache()
 
 	// Generate JWT token
 	token, err := pkg.GenerateJWT(fmt.Sprintf("%d", user.UserID))

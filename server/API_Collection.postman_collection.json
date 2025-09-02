@@ -103,12 +103,70 @@
                                 "verify"
                             ]
                         },
-                        "description": "Verify if a number is an Armstrong number (requires JWT)"
+                        "description": "Verify if a number is an Armstrong number and save to database if true (requires JWT)"
                     },
                     "response": []
                 }
             ],
             "description": "Armstrong endpoints for number verification"
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{jwt_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/users/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                ""
+                            ]
+                        },
+                        "description": "Get all registered users (requires JWT)"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get User with Armstrong Numbers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{jwt_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/users/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "users",
+                                "1"
+                            ]
+                        },
+                        "description": "Get user details along with their Armstrong numbers by user ID (requires JWT)"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "User management endpoints"
         }
     ],
     "event": [
