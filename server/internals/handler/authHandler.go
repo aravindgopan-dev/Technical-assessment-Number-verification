@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"server/internals/services"
 	"server/internals/types"
-
 	"github.com/gin-gonic/gin"
 )
 
