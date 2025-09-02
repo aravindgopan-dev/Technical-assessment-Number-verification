@@ -13,7 +13,7 @@ func GetAllUsers(page int) (types.PaginatedUsersResponse, error) {
 	if page <= 0 {
 		page = 1
 	}
-	limit := 10
+	limit := 5
 
 	// Try to get from cache
 	if cachedResponse, err := cache.GetCachedUsers(page); err == nil {
