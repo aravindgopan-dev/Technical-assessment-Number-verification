@@ -29,7 +29,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "5000" // Default port for local development
+		port = "10000" // Render.com default port
 	}
 	r.Run("0.0.0.0:" + port)
 	fmt.Println("Hello, World!")
