@@ -1,6 +1,4 @@
-# Ignore backend and frontend folders while rewriting
-
-frontend/
+# Ignore backend and frontend folders while rewritin
 
 # Note: server/ folder is now actively developed, so not ignored
 
