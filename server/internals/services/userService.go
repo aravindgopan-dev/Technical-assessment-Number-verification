@@ -100,8 +100,6 @@ func GetUserWithArmstrongNumbers(userID uint) (types.UserResponse, []types.Armst
 	return userResponse, armstrongResponses, nil
 }
 
-
-
 // InvalidateUsersCache removes all cached users data
 func InvalidateUsersCache() {
 	cache.InvalidateUsersCache()
