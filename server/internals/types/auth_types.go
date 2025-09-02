@@ -21,3 +21,6 @@ type AuthResponse struct {
 	User    *modals.User `json:"user,omitempty"`
 	Token   string       `json:"token,omitempty"`
 }
+
+
+
