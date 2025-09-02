@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"server/internals/handler"
 	"server/pkg"
 
@@ -30,6 +29,7 @@ func main() {
 	handler.SetupArmstrongRoutes(api)
 	handler.SetupUserRoutes(api)
 
-	r.Run(":" + os.Getenv("PORT"))
+	
+	r.Run("0.0.0.0:10000")
 	fmt.Println("Hello, World!")
 }
