@@ -29,8 +29,6 @@ func GetAllUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-
-
 func GetUser(c *gin.Context) {
 	userIDStr := c.Param("id")
 	userID, err := strconv.ParseUint(userIDStr, 10, 32)

@@ -5,8 +5,8 @@ import (
 	"server/internals/middleware"
 	"server/internals/services"
 	"strconv"
-	"github.com/gin-gonic/gin"
 
+	"github.com/gin-gonic/gin"
 )
 
 func CreateArmstrong(c *gin.Context) {
@@ -20,17 +20,14 @@ func CreateArmstrong(c *gin.Context) {
 		return
 	}
 
-
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	isArmstrong := services.VerifyArmstrongNumber(req.Number,userIdInt)
+	isArmstrong := services.VerifyArmstrongNumber(req.Number, userIdInt)
 	c.JSON(http.StatusOK, gin.H{"isArmstrong": isArmstrong})
 }
-
-
 
 func SetupArmstrongRoutes(r *gin.RouterGroup) {
 	armstrong := r.Group("/armstrong", middleware.AuthMiddleware)
