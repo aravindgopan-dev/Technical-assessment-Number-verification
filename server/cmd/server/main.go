@@ -30,6 +30,12 @@ func main() {
 	handler.SetupArmstrongRoutes(api)
 	handler.SetupUserRoutes(api)
 
-	r.Run(":" + os.Getenv("PORT"))
+	port := os.Getenv("PORT")
+
+	if port==""{
+		port="5000"
+	}
+
+	r.Run("0.0.0.0:"+port)
 	fmt.Println("Hello, World!")
 }
