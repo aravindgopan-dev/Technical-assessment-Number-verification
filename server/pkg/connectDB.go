@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"gorm.io/driver/postgres"
@@ -11,12 +10,17 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDB() {
-	dsn := (os.Getenv("DATABASE_URL"))
+func ConnectDB() error {
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		return fmt.Errorf("DATABASE_URL environment variable is not set")
+	}
+
 	var err error
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Error connecting to database")
+		return fmt.Errorf("error connecting to database: %w", err)
 	}
 	fmt.Println("Connected to database")
+	return nil
 }

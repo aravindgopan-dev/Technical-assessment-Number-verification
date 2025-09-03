@@ -11,13 +11,22 @@ import (
 
 func init() {
 	pkg.LoadEnv()
-	pkg.ConnectDB()
-	pkg.ConnectRedis()
 	//run only when db change
 	//pkg.Migrate()
 }
 
 func main() {
+	// Connect to database and Redis with proper error handling
+	if err := pkg.ConnectDB(); err != nil {
+		fmt.Printf("Warning: Database connection failed: %v\n", err)
+		fmt.Println("Server will start without database connection")
+	}
+
+	if err := pkg.ConnectRedis(); err != nil {
+		fmt.Printf("Warning: Redis connection failed: %v\n", err)
+		fmt.Println("Server will start without Redis connection")
+	}
+
 	r := gin.Default()
 
 	// Setup API routes
@@ -31,6 +40,7 @@ func main() {
 	if port == "" {
 		port = "10000" // Render.com default port
 	}
-	r.Run(":"+ port)
-	fmt.Println("Hello, World!")
+
+	fmt.Printf("Starting server on port %s\n", port)
+	r.Run(":" + port)
 }
