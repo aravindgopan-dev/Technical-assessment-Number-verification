@@ -40,6 +40,26 @@ All protected endpoints require JWT token in the Authorization header:
 Authorization: Bearer <your-jwt-token>
 ```
 
+## ⚡ Performance Optimizations
+
+The application implements several performance optimizations to ensure fast response times and efficient resource usage:
+
+| Optimization | Details |
+|--------------|---------|
+| 🚦 **Rate Limiting** | Token bucket algorithm using `golang.org/x/time/rate` - 100 requests per minute per client, prevents API abuse, returns HTTP 429 when limit exceeded |
+| 🗄️ **Redis Caching** | Paginated user lists cached for 5 minutes with key pattern `all_users_page_{page_number}`, automatic invalidation, reduces database queries by ~80% |
+| 📄 **Pagination** | 5 users per page with metadata, includes total count/current page/total pages, uses LIMIT/OFFSET for efficient queries, memory efficient |
+| 🔐 **JWT Token Management** | 24-hour token lifetime, stateless authentication, HMAC-SHA256 signature verification, automatic refresh handled by clients |
+
+## 🚧 Development Challenges & Solutions
+
+| Challenge | Problem | Solution |
+|-----------|---------|----------|
+| 🖥️ **AWS EC2 Micro Instance Memory Issues** | Unable to build Go backend due to insufficient memory | Unable to login into the instance, figuring out alternative deployment |
+| 🔄 **Database Migration Circular Dependencies** | Migration errors due to circular references | Restructured models and used proper GORM migration ordering |
+| 🌐 **CORS Configuration Issues** | Frontend CORS errors with backend communication | Updated Vite proxy config and added CORS middleware in Go backend |
+| 🗄️ **Database Schema Mismatch** | Unable to write to database due to schema changes | Dropped tables and re-ran migrations with proper data validation |
+
 ## 🗄️ Database Schema
 
 The application uses **PostgreSQL** with the following schema:
@@ -116,17 +136,6 @@ CREATE TABLE armstrongs (
    npm run dev
    ```
 
-## ⚡ Performance Optimizations
-
-The application implements several performance optimizations to ensure fast response times and efficient resource usage:
-
-| Optimization | Details |
-|--------------|---------|
-| 🚦 **Rate Limiting** | Token bucket algorithm using `golang.org/x/time/rate` - 100 requests per minute per client, prevents API abuse, returns HTTP 429 when limit exceeded |
-| 🗄️ **Redis Caching** | Paginated user lists cached for 5 minutes with key pattern `all_users_page_{page_number}`, automatic invalidation, reduces database queries by ~80% |
-| 📄 **Pagination** | 5 users per page with metadata, includes total count/current page/total pages, uses LIMIT/OFFSET for efficient queries, memory efficient |
-| 🔐 **JWT Token Management** | 24-hour token lifetime, stateless authentication, HMAC-SHA256 signature verification, automatic refresh handled by clients |
-
 ## 🐳 Docker Deployment
 
 The application includes a production-ready Dockerfile for easy deployment:
@@ -156,16 +165,6 @@ Use the provided Postman collection (`server/API_Collection.postman_collection.j
 | **Automatic JWT token extraction** | And usage |
 | **Example request/response data** | For easy testing |
 | **Environment variables** | For easy configuration |
-
-## 🚧 Development Challenges & Solutions
-
-| Challenge | Problem | Solution |
-|-----------|---------|----------|
-| 🖥️ **AWS EC2 Micro Instance Memory Issues** | Unable to build Go backend due to insufficient memory | Unable to login into the instance, figuring out alternative deployment |
-| 🔄 **Database Migration Circular Dependencies** | Migration errors due to circular references | Restructured models and used proper GORM migration ordering |
-| 🌐 **CORS Configuration Issues** | Frontend CORS errors with backend communication | Updated Vite proxy config and added CORS middleware in Go backend |
-| 🗄️ **Database Schema Mismatch** | Unable to write to database due to schema changes | Dropped tables and re-ran migrations with proper data validation |
-| ⚡ **Performance Optimization Challenges** | Slow response times and high database load | Added Redis caching, pagination, and rate limiting |
 
 ## 🛠️ Tech Stack
 
