@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import FormContainer from '../components/forms/FormContainer';
+import Input from '../components/forms/Input';
+import Button from '../components/forms/Button';
+import ErrorMessage from '../components/ui/ErrorMessage';
+import Icon from '../components/ui/Icon';
 
 function Register() {
     const [username, setUsername] = useState('');
@@ -90,120 +95,87 @@ function Register() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 animate-fade-in">
-                <div className="card">
-                    <div className="text-center mb-8">
-                        <h2 className="text-3xl font-bold text-white mb-2">
-                            Create Account
-                        </h2>
-                        <p className="text-slate-400">
-                            Join Cooeey and start verifying Armstrong numbers
-                        </p>
+        <FormContainer
+            title="Create Account"
+            subtitle="Join Cooeey and start verifying Armstrong numbers"
+            icon={<Icon name="user" size="xl" className="text-white" />}
+        >
+            <ErrorMessage message={apiError} className="mb-6" />
+
+            <form className="space-y-6" onSubmit={handleSubmit}>
+                <div className="space-y-4">
+                    <div>
+                        <label htmlFor="username" className="block text-sm font-medium text-slate-300 mb-2">
+                            Username
+                        </label>
+                        <Input
+                            id="username"
+                            name="username"
+                            type="text"
+                            placeholder="Enter your username"
+                            value={username}
+                            onChange={handleUsernameChange}
+                            error={errors.username}
+                            required
+                        />
                     </div>
-
-                    {apiError && (
-                        <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg text-sm mb-6">
-                            {apiError}
-                        </div>
-                    )}
-
-                    <form className="space-y-6" onSubmit={handleSubmit}>
-                        <div className="space-y-4">
-                            <div>
-                                <label htmlFor="username" className="block text-sm font-medium text-slate-300 mb-2">
-                                    Username
-                                </label>
-                                <input
-                                    id="username"
-                                    name="username"
-                                    type="text"
-                                    autoComplete="username"
-                                    required
-                                    className={`input ${errors.username ? 'border-red-500' : ''}`}
-                                    placeholder="Enter your username"
-                                    value={username}
-                                    onChange={handleUsernameChange}
-                                />
-                                {errors.username && (
-                                    <p className="mt-1 text-sm text-red-400">{errors.username}</p>
-                                )}
-                            </div>
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-                                    Email address
-                                </label>
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    autoComplete="email"
-                                    required
-                                    className={`input ${errors.email ? 'border-red-500' : ''}`}
-                                    placeholder="Enter your email"
-                                    value={email}
-                                    onChange={handleEmailChange}
-                                />
-                                {errors.email && (
-                                    <p className="mt-1 text-sm text-red-400">{errors.email}</p>
-                                )}
-                            </div>
-                            <div>
-                                <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
-                                    Password
-                                </label>
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    autoComplete="new-password"
-                                    required
-                                    className={`input ${errors.password ? 'border-red-500' : ''}`}
-                                    placeholder="Enter your password"
-                                    value={password}
-                                    onChange={handlePasswordChange}
-                                />
-                                {errors.password && (
-                                    <p className="mt-1 text-sm text-red-400">{errors.password}</p>
-                                )}
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={isLoading}
-                            className="w-full btn-primary py-3 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {isLoading ? (
-                                <span className="flex items-center justify-center">
-                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Creating account...
-                                </span>
-                            ) : (
-                                'Create Account'
-                            )}
-                        </button>
-                    </form>
-
-                    <div className="mt-6 text-center">
-                        <p className="text-slate-400">
-                            Already have an account?{' '}
-                            <Link to="/login" className="text-green-400 hover:text-green-300 font-medium transition-colors">
-                                Sign in
-                            </Link>
-                        </p>
-                        <p className="mt-2">
-                            <Link to="/" className="text-slate-500 hover:text-slate-400 text-sm transition-colors">
-                                ← Back to home
-                            </Link>
-                        </p>
+                    <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
+                            Email address
+                        </label>
+                        <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={handleEmailChange}
+                            error={errors.email}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
+                            Password
+                        </label>
+                        <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            value={password}
+                            onChange={handlePasswordChange}
+                            error={errors.password}
+                            required
+                        />
                     </div>
                 </div>
+
+                <Button
+                    type="submit"
+                    loading={isLoading}
+                    loadingText="Creating account..."
+                    size="lg"
+                    className="w-full"
+                >
+                    Create Account
+                </Button>
+            </form>
+
+            <div className="mt-6 text-center">
+                <p className="text-slate-400">
+                    Already have an account?{' '}
+                    <Link to="/login" className="text-green-400 hover:text-green-300 font-medium transition-colors">
+                        Sign in
+                    </Link>
+                </p>
+                <p className="mt-2">
+                    <Link to="/" className="text-slate-500 hover:text-slate-400 text-sm transition-colors">
+                        ← Back to home
+                    </Link>
+                </p>
             </div>
-        </div>
+        </FormContainer>
     );
 }
 
