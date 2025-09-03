@@ -2,10 +2,7 @@
 
 # 🔢 Cooeey - Armstrong Number Verification System
 
-[![Go Version](https://img.shields.io/badge/Go-1.24-blue.svg)](https://golang.org/)
-[![React Version](https://img.shields.io/badge/React-19-61dafb.svg)](https://reactjs.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ed.svg)](https://www.docker.com/)
+
 
 *A modern SaaS application for Armstrong number verification with user management capabilities, featuring advanced performance optimizations and enterprise-grade security.*
 
@@ -45,8 +42,9 @@
 
 ## 🔌 API Endpoints
 
-The application provides **6 comprehensive API endpoints** with JWT authentication and rate limiting:
+The application provides **6 comprehensive API endpoints** with JWT authentication and rate limiting. 
 
+[📋 Postman Collection](API_Collection.postman_collection.json)
 | Method | Endpoint | Protected | Request Body | Description |
 |--------|----------|-----------|--------------|-------------|
 | `POST` | `/api/auth/register` | ❌ | `{"name": "string", "email": "string", "password": "string"}` | Register a new user |
@@ -142,37 +140,12 @@ CREATE TABLE armstrongs (
 
 The application implements several performance optimizations to ensure fast response times and efficient resource usage:
 
-### 🚦 Rate Limiting
-| Feature | Details |
-|---------|---------|
-| **Implementation** | Token bucket algorithm using `golang.org/x/time/rate` |
-| **Configuration** | 100 requests per minute per client |
-| **Protection** | Prevents API abuse and ensures fair usage |
-| **Response** | Returns HTTP 429 when limit exceeded |
-
-### 🗄️ Redis Caching
-| Feature | Details |
-|---------|---------|
-| **User Data Caching** | Paginated user lists cached for 5 minutes |
-| **Cache Key Pattern** | `all_users_page_{page_number}` |
-| **Automatic Invalidation** | Cache cleared when new users register |
-| **Performance Impact** | Reduces database queries by ~80% for user listings |
-
-### 📄 Pagination
-| Feature | Details |
-|---------|---------|
-| **User Listings** | 5 users per page with metadata |
-| **Response Format** | Includes total count, current page, and total pages |
-| **Database Optimization** | Uses LIMIT and OFFSET for efficient queries |
-| **Memory Efficient** | Prevents loading large datasets into memory |
-
-### 🔐 JWT Token Management
-| Feature | Details |
-|---------|---------|
-| **Token Expiry** | 24-hour token lifetime |
-| **Stateless Authentication** | No server-side session storage |
-| **Secure Validation** | HMAC-SHA256 signature verification |
-| **Automatic Refresh** | Clients handle token renewal |
+| Optimization | Details |
+|--------------|---------|
+| 🚦 **Rate Limiting** | Token bucket algorithm using `golang.org/x/time/rate` - 100 requests per minute per client, prevents API abuse, returns HTTP 429 when limit exceeded |
+| 🗄️ **Redis Caching** | Paginated user lists cached for 5 minutes with key pattern `all_users_page_{page_number}`, automatic invalidation, reduces database queries by ~80% |
+| 📄 **Pagination** | 5 users per page with metadata, includes total count/current page/total pages, uses LIMIT/OFFSET for efficient queries, memory efficient |
+| 🔐 **JWT Token Management** | 24-hour token lifetime, stateless authentication, HMAC-SHA256 signature verification, automatic refresh handled by clients |
 
 ## 🐳 Docker Deployment
 
@@ -191,27 +164,7 @@ docker run -p 10000:10000 \
   cooeey-backend
 ```
 
-### 🎯 Docker Features
-| Feature | Description |
-|---------|-------------|
-| **Multi-stage Build** | Optimized image size (~20MB final image) |
-| **Non-root User** | Security best practice |
-| **Alpine Linux** | Minimal base image for security |
-| **Health Checks** | Built-in application health monitoring |
-| **Environment Variables** | Configurable via environment |
 
-## 🛠️ Development
-
-The frontend uses Vite's proxy configuration to forward API requests to the backend server during development. The proxy is configured in `frontend/vite.config.js`.
-
-### 🌍 Environment Configuration
-
-The frontend automatically detects the environment:
-| Environment | Configuration |
-|-------------|---------------|
-| **Development** | Uses Vite proxy (no baseUrl needed) |
-| **Test** | Direct connection to `http://localhost:5000` |
-| **Production** | Configurable production URL |
 
 ## 🧪 API Testing
 
@@ -226,30 +179,13 @@ Use the provided Postman collection (`server/API_Collection.postman_collection.j
 
 ## 🚧 Development Challenges & Solutions
 
-### 🖥️ AWS EC2 Micro Instance Memory Issues
-| Issue | Solution |
-|-------|----------|
-| **Problem**: Unable to build Go backend due to insufficient memory | **Solution**: Unable to login into the instance, figuring out alternative deployment |
-
-### 🔄 Database Migration Circular Dependencies
-| Issue | Solution |
-|-------|----------|
-| **Problem**: Migration errors due to circular references | **Solution**: Restructured models and used proper GORM migration ordering |
-
-### 🌐 CORS Configuration Issues
-| Issue | Solution |
-|-------|----------|
-| **Problem**: Frontend CORS errors with backend communication | **Solution**: Updated Vite proxy config and added CORS middleware in Go backend |
-
-### 🗄️ Database Schema Mismatch
-| Issue | Solution |
-|-------|----------|
-| **Problem**: Unable to write to database due to schema changes | **Solution**: Dropped tables and re-ran migrations with proper data validation |
-
-### ⚡ Performance Optimization Challenges
-| Issue | Solution |
-|-------|----------|
-| **Problem**: Slow response times and high database load | **Solution**: Added Redis caching, pagination, and rate limiting |
+| Challenge | Problem | Solution |
+|-----------|---------|----------|
+| 🖥️ **AWS EC2 Micro Instance Memory Issues** | Unable to build Go backend due to insufficient memory | Unable to login into the instance, figuring out alternative deployment |
+| 🔄 **Database Migration Circular Dependencies** | Migration errors due to circular references | Restructured models and used proper GORM migration ordering |
+| 🌐 **CORS Configuration Issues** | Frontend CORS errors with backend communication | Updated Vite proxy config and added CORS middleware in Go backend |
+| 🗄️ **Database Schema Mismatch** | Unable to write to database due to schema changes | Dropped tables and re-ran migrations with proper data validation |
+| ⚡ **Performance Optimization Challenges** | Slow response times and high database load | Added Redis caching, pagination, and rate limiting |
 
 ## 📁 Project Structure
 
@@ -285,29 +221,4 @@ Use the provided Postman collection (`server/API_Collection.postman_collection.j
 └── README.md             # This file
 ```
 
-## 🤝 Contributing
 
-We welcome contributions! Please follow these steps:
-
-1. 🍴 **Fork** the repository
-2. 🌿 **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. ✏️ **Make** your changes
-4. 🧪 **Test** thoroughly
-5. 📝 **Commit** your changes (`git commit -m 'Add some amazing feature'`)
-6. 📤 **Push** to the branch (`git push origin feature/amazing-feature`)
-7. 🔄 **Open** a Pull Request
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-
-**Made with ❤️ by [Aravind Gopan](https://github.com/aravindgopan-dev)**
-
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/aravindgopan-dev)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/aravindgopan)
-
-</div>
