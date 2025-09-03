@@ -20,26 +20,6 @@
 | 🐳 **Docker Ready** | Easy deployment with Docker containerization |
 
 
-## 🛠️ Tech Stack
-
-### 🔧 Backend
-| Technology | Purpose | Version |
-|------------|---------|---------|
-| **Go** | High-performance backend server | 1.24 |
-| **Gin** | Web framework | Latest |
-| **JWT** | Authentication with 24-hour token expiry | Latest |
-| **PostgreSQL** | Primary database | 8.0+ |
-| **Redis** | Caching and session management | 6.0+ |
-| **Docker** | Containerization | Latest |
-
-### 🎨 Frontend
-| Technology | Purpose | Version |
-|------------|---------|---------|
-| **React** | Modern React with hooks | 19 |
-| **Vite** | Fast build tool and dev server | Latest |
-| **Tailwind CSS** | Utility-first CSS framework | Latest |
-| **React Router** | Client-side routing | Latest |
-
 ## 🔌 API Endpoints
 
 The application provides **6 comprehensive API endpoints** with JWT authentication and rate limiting. 
@@ -186,6 +166,26 @@ Use the provided Postman collection (`server/API_Collection.postman_collection.j
 | 🌐 **CORS Configuration Issues** | Frontend CORS errors with backend communication | Updated Vite proxy config and added CORS middleware in Go backend |
 | 🗄️ **Database Schema Mismatch** | Unable to write to database due to schema changes | Dropped tables and re-ran migrations with proper data validation |
 | ⚡ **Performance Optimization Challenges** | Slow response times and high database load | Added Redis caching, pagination, and rate limiting |
+
+## 🛠️ Tech Stack
+
+### 🔧 Backend
+| Technology | Purpose | Version |
+|------------|---------|---------|
+| **Go** | High-performance backend server | 1.24 |
+| **Gin** | Web framework | Latest |
+| **JWT** | Authentication with 24-hour token expiry | Latest |
+| **PostgreSQL** | Primary database | 8.0+ |
+| **Redis** | Caching and session management | 6.0+ |
+| **Docker** | Containerization | Latest |
+
+### 🎨 Frontend
+| Technology | Purpose | Version |
+|------------|---------|---------|
+| **React** | Modern React with hooks | 19 |
+| **Vite** | Fast build tool and dev server | Latest |
+| **Tailwind CSS** | Utility-first CSS framework | Latest |
+| **React Router** | Client-side routing | Latest |
 
 ## 📁 Project Structure
 
