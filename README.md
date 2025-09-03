@@ -10,7 +10,7 @@
 
 ## 🎥 Demo
 
-![Demo](demo.mp4)
+[🎥 Watch Demo](https://drive.google.com/file/d/1HSAkLJLOLB9gbFLIMPhZSU7w0uWnrNzb/view?usp=sharing)
 
 ## ✨ Features
 
