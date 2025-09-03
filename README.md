@@ -8,6 +8,10 @@
 
 </div>
 
+## 🎥 Demo
+
+![Demo](demo.mp4)
+
 ## ✨ Features
 
 | Feature | Description |

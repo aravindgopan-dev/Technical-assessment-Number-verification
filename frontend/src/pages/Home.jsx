@@ -17,8 +17,7 @@ function Home() {
                 <div className="max-w-6xl mx-auto text-center animate-fade-in">
                     <div className="mb-8">
                         <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 leading-tight">
-                            Welcome to{' '}
-                            <span className="text-gradient">Cooeey</span>
+                            <span className="text-gradient">Amstromer</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
                             Your comprehensive platform for Armstrong number verification and user management.
