@@ -6,6 +6,7 @@ import (
 	"server/internals/handler"
 	"server/pkg"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 

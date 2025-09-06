@@ -7,7 +7,7 @@ const API_CONFIG = {
         baseUrl: 'http://localhost:5000', // Direct call for test environment
     },
     production: {
-        baseUrl: 'https://your-production-domain.com', // Change this for production
+        baseUrl: 'http://ec2-52-23-201-90.compute-1.amazonaws.com', // Your deployed backend URL
     },
 };
 
