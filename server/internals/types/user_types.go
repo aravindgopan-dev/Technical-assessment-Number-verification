@@ -18,6 +18,12 @@ type PaginatedUsersResponse struct {
 	TotalPages int            `json:"total_pages"`
 }
 
+// AllUsersCacheResponse represents all users cached data
+type AllUsersCacheResponse struct {
+	Users []UserResponse `json:"users"`
+	Total int64          `json:"total"`
+}
+
 // ArmstrongWithUserResponse represents Armstrong number with user info
 type ArmstrongWithUserResponse struct {
 	ArmstrongID uint   `json:"armstrong_id"`

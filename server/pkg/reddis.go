@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -24,6 +25,15 @@ func ConnectRedis() {
 	if err != nil {
 		log.Fatalf("Failed to parse Redis URL: %v", err)
 	}
+
+	// Configure connection pool for better performance
+	opt.PoolSize = 20    // Maximum number of connections
+	opt.MinIdleConns = 5 // Minimum number of idle connections
+	opt.MaxRetries = 3   // Maximum number of retries
+	opt.DialTimeout = 5 * time.Second
+	opt.ReadTimeout = 3 * time.Second
+	opt.WriteTimeout = 3 * time.Second
+	opt.PoolTimeout = 4 * time.Second
 
 	RedisClient = redis.NewClient(opt)
 

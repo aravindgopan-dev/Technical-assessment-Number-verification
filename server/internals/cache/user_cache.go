@@ -10,34 +10,30 @@ import (
 )
 
 const (
-	UserCacheKeyPrefix = "all_users_page_"
-	UserCacheTTL       = 5 * time.Minute
+	AllUsersCacheKey = "all_users"
+	UserCacheTTL     = 5 * time.Minute
 )
 
-
-
-// GetCachedUsers retrieves paginated users from cache
-func GetCachedUsers(page int) (*types.PaginatedUsersResponse, error) {
-	cacheKey := fmt.Sprintf("%s%d", UserCacheKeyPrefix, page)
+// GetAllCachedUsers retrieves all users from cache
+func GetAllCachedUsers() (*types.AllUsersCacheResponse, error) {
 	ctx := context.Background()
 
-	cachedData, err := pkg.RedisClient.Get(ctx, cacheKey).Result()
+	cachedData, err := pkg.RedisClient.Get(ctx, AllUsersCacheKey).Result()
 	if err != nil {
 		return nil, err
 	}
 
-	var cachedResponse types.PaginatedUsersResponse
+	var cachedResponse types.AllUsersCacheResponse
 	if err := json.Unmarshal([]byte(cachedData), &cachedResponse); err != nil {
 		return nil, err
 	}
 
-	fmt.Println("Cache hit: returning cached users")
+	fmt.Println("Cache hit: returning all cached users")
 	return &cachedResponse, nil
 }
 
-// SetCachedUsers stores paginated users in cache
-func SetCachedUsers(page int, response *types.PaginatedUsersResponse) error {
-	cacheKey := fmt.Sprintf("%s%d", UserCacheKeyPrefix, page)
+// SetAllCachedUsers stores all users in cache
+func SetAllCachedUsers(response *types.AllUsersCacheResponse) error {
 	ctx := context.Background()
 
 	jsonData, err := json.Marshal(response)
@@ -45,9 +41,9 @@ func SetCachedUsers(page int, response *types.PaginatedUsersResponse) error {
 		return err
 	}
 
-	err = pkg.RedisClient.Set(ctx, cacheKey, jsonData, UserCacheTTL).Err()
+	err = pkg.RedisClient.Set(ctx, AllUsersCacheKey, jsonData, UserCacheTTL).Err()
 	if err == nil {
-		fmt.Println("Cached users data for 5 minutes")
+		fmt.Println("Cached all users data for 5 minutes")
 	}
 	return err
 }
@@ -56,23 +52,8 @@ func SetCachedUsers(page int, response *types.PaginatedUsersResponse) error {
 func InvalidateUsersCache() {
 	ctx := context.Background()
 
-	// Get all cache keys that match the pattern
-	pattern := UserCacheKeyPrefix + "*"
-	keys, err := pkg.RedisClient.Keys(ctx, pattern).Result()
-	if err != nil {
-		fmt.Printf("Error getting cache keys: %v\n", err)
-		return
-	}
+	// Remove all users cache
+	pkg.RedisClient.Del(ctx, AllUsersCacheKey)
 
-	// Delete all matching keys
-	if len(keys) > 0 {
-		err = pkg.RedisClient.Del(ctx, keys...).Err()
-		if err != nil {
-			fmt.Printf("Error invalidating users cache: %v\n", err)
-		} else {
-			fmt.Printf("Users cache invalidated successfully (%d keys removed)\n", len(keys))
-		}
-	} else {
-		fmt.Println("No users cache keys found to invalidate")
-	}
+	fmt.Println("Invalidated all users cache")
 }

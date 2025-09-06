@@ -15,18 +15,19 @@ func GetAllUsers(page int) (types.PaginatedUsersResponse, error) {
 	}
 	limit := 5
 
-	// Try to get from cache
-	if cachedResponse, err := cache.GetCachedUsers(page); err == nil {
-		return *cachedResponse, nil
+	// Try to get all users from cache first
+	if cachedAllUsers, err := cache.GetAllCachedUsers(); err == nil {
+		// Return paginated response from cached data
+		return paginateFromCachedUsers(cachedAllUsers, page, limit), nil
 	}
 
-	fmt.Println("Cache miss: fetching users from database")
+	fmt.Println("Cache miss: fetching all users from database")
 
-	// Use GORM's efficient pagination with count
+	// Fetch all users from database
 	var users []modals.User
 	var total int64
 
-	// Get count and paginated results efficiently
+	// Get all users with their Armstrong numbers
 	query := pkg.DB.Model(&modals.User{}).Preload("ArmstrongNumbers")
 
 	// Get total count
@@ -34,9 +35,8 @@ func GetAllUsers(page int) (types.PaginatedUsersResponse, error) {
 		return types.PaginatedUsersResponse{}, err
 	}
 
-	// Calculate offset and get paginated results
-	offset := (page - 1) * limit
-	if err := query.Offset(offset).Limit(limit).Find(&users).Error; err != nil {
+	// Get all users
+	if err := query.Find(&users).Error; err != nil {
 		return types.PaginatedUsersResponse{}, err
 	}
 
@@ -52,27 +52,60 @@ func GetAllUsers(page int) (types.PaginatedUsersResponse, error) {
 		})
 	}
 
+	// Cache all users
+	allUsersCache := &types.AllUsersCacheResponse{
+		Users: userResponses,
+		Total: total,
+	}
+	cache.SetAllCachedUsers(allUsersCache)
+
+	// Return paginated response
+	return paginateFromCachedUsers(allUsersCache, page, limit), nil
+}
+
+// paginateFromCachedUsers creates a paginated response from cached all users data
+func paginateFromCachedUsers(cachedData *types.AllUsersCacheResponse, page, limit int) types.PaginatedUsersResponse {
+	total := cachedData.Total
+	allUsers := cachedData.Users
+
+	// Calculate pagination
+	offset := (page - 1) * limit
+	end := offset + limit
+
+	// Ensure we don't go out of bounds
+	if offset >= len(allUsers) {
+		return types.PaginatedUsersResponse{
+			Users:      []types.UserResponse{},
+			Total:      total,
+			Page:       page,
+			Limit:      limit,
+			TotalPages: int((total + int64(limit) - 1) / int64(limit)),
+		}
+	}
+
+	if end > len(allUsers) {
+		end = len(allUsers)
+	}
+
+	// Get the page slice
+	paginatedUsers := allUsers[offset:end]
+
 	// Calculate total pages
 	totalPages := int((total + int64(limit) - 1) / int64(limit))
 
-	response := types.PaginatedUsersResponse{
-		Users:      userResponses,
+	return types.PaginatedUsersResponse{
+		Users:      paginatedUsers,
 		Total:      total,
 		Page:       page,
 		Limit:      limit,
 		TotalPages: totalPages,
 	}
-
-	// Cache the result
-	cache.SetCachedUsers(page, &response)
-
-	return response, nil
 }
 
 func GetUserWithArmstrongNumbers(userID uint) (types.UserResponse, []types.ArmstrongResponse, error) {
-	// Get user details
+	// Get user details with Armstrong numbers in a single query using Preload
 	var user modals.User
-	if err := pkg.DB.First(&user, userID).Error; err != nil {
+	if err := pkg.DB.Preload("ArmstrongNumbers").First(&user, userID).Error; err != nil {
 		return types.UserResponse{}, nil, err
 	}
 
@@ -83,14 +116,9 @@ func GetUserWithArmstrongNumbers(userID uint) (types.UserResponse, []types.Armst
 		CreatedAt: user.CreatedAt.Format("2006-01-02 15:04:05"),
 	}
 
-	// Get Armstrong numbers for this user (simplified response)
-	var armstrongs []modals.Armstrong
-	if err := pkg.DB.Where("user_id = ?", userID).Find(&armstrongs).Error; err != nil {
-		return types.UserResponse{}, nil, err
-	}
-
+	// Convert Armstrong numbers to response format
 	var armstrongResponses []types.ArmstrongResponse
-	for _, armstrong := range armstrongs {
+	for _, armstrong := range user.ArmstrongNumbers {
 		armstrongResponses = append(armstrongResponses, types.ArmstrongResponse{
 			ArmstrongID: armstrong.ArmstrongID,
 			Number:      armstrong.Number,
