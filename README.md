@@ -12,6 +12,12 @@
 
 [🎥 Watch Demo](https://drive.google.com/file/d/1bcm3t1dQnQzPWLF2d5HasIlcVKBWEla4/view?usp=sharing)
 
+## 🌐 Live Application
+
+**🚀 Deployed Application:** [http://ec2-52-23-201-90.compute-1.amazonaws.com](http://ec2-52-23-201-90.compute-1.amazonaws.com)
+
+*Deployed using Docker container with Nginx reverse proxy on port 80 forwarding to localhost:10000*
+
 ## ✨ Features
 
 | Feature | Description |
@@ -51,8 +57,8 @@ The application implements several performance optimizations to ensure fast resp
 | Optimization | Details |
 |--------------|---------|
 | 🚦 **Rate Limiting** | Token bucket algorithm using `golang.org/x/time/rate` - 100 requests per minute per client, prevents API abuse, returns HTTP 429 when limit exceeded |
-| 🗄️ **Redis Caching** | Paginated user lists cached for 5 minutes with key pattern `all_users_page_{page_number}`, automatic invalidation, reduces database queries by ~80% |
-| 📄 **Pagination** | 5 users per page with metadata, includes total count/current page/total pages, uses LIMIT/OFFSET for efficient queries, memory efficient |
+| 🗄️ **Redis Caching** | All users cached for 5 minutes with single key `all_users`, pagination handled in memory, reduces database queries by ~90% |
+| 📄 **Pagination** | 5 users per page with metadata, includes total count/current page/total pages, handled in memory from cached data for optimal performance |
 | 🔐 **JWT Token Management** | 24-hour token lifetime, stateless authentication, HMAC-SHA256 signature verification, automatic refresh handled by clients |
 
 ## 🚧 Development Challenges & Solutions
@@ -142,7 +148,12 @@ CREATE TABLE armstrongs (
 
 ## 🐳 Docker Deployment
 
-The application includes a production-ready Dockerfile for easy deployment:
+The application includes a production-ready Dockerfile for easy deployment and is currently deployed on AWS EC2:
+
+### 🌐 Production Deployment
+- **Live URL:** [http://ec2-52-23-201-90.compute-1.amazonaws.com](http://ec2-52-23-201-90.compute-1.amazonaws.com)
+- **Deployment:** Docker container with Nginx reverse proxy
+- **Port Configuration:** Nginx on port 80 → localhost:10000 (Go backend)
 
 ### 🏗️ Build and Run with Docker
 ```bash
@@ -155,6 +166,23 @@ docker run -p 10000:10000 \
   -e REDIS_URL="your_redis_connection_string" \
   -e JWT_SECRET="your_jwt_secret" \
   cooeey-backend
+```
+
+### 🔧 Nginx Configuration
+The production deployment uses Nginx as a reverse proxy:
+```nginx
+server {
+    listen 80;
+    server_name ec2-52-23-201-90.compute-1.amazonaws.com;
+    
+    location / {
+        proxy_pass http://localhost:10000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
 ```
 
 
