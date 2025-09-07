@@ -14,7 +14,7 @@ const (
 	UserCacheTTL     = 5 * time.Minute
 )
 
-// GetAllCachedUsers retrieves all users from cache
+
 func GetAllCachedUsers() (*types.AllUsersCacheResponse, error) {
 	ctx := context.Background()
 
@@ -32,7 +32,6 @@ func GetAllCachedUsers() (*types.AllUsersCacheResponse, error) {
 	return &cachedResponse, nil
 }
 
-// SetAllCachedUsers stores all users in cache
 func SetAllCachedUsers(response *types.AllUsersCacheResponse) error {
 	ctx := context.Background()
 
@@ -48,11 +47,9 @@ func SetAllCachedUsers(response *types.AllUsersCacheResponse) error {
 	return err
 }
 
-// InvalidateUsersCache removes all cached users data
 func InvalidateUsersCache() {
 	ctx := context.Background()
 
-	// Remove all users cache
 	pkg.RedisClient.Del(ctx, AllUsersCacheKey)
 
 	fmt.Println("Invalidated all users cache")

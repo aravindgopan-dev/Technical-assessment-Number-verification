@@ -15,7 +15,6 @@ func VerifyArmstrongNumber(n int, userIdInt int) bool {
 		IsArmstrong: isArmstrongResult,
 	}
 
-	// Log to database but don't let database errors affect the result
 	pkg.DB.Create(record)
 
 	return isArmstrongResult
@@ -36,5 +35,3 @@ func isArmstrong(n int) bool {
 
 	return true
 }
-
-// VerifyArmstrongNumber returns true if the given number is an Armstrong number

@@ -1,6 +1,5 @@
 package types
 
-// UserResponse represents a user in API responses
 type UserResponse struct {
 	UserID         uint   `json:"user_id"`
 	Name           string `json:"name"`
@@ -9,7 +8,6 @@ type UserResponse struct {
 	ArmstrongCount int    `json:"armstrong_count"`
 }
 
-// PaginatedUsersResponse represents paginated users data
 type PaginatedUsersResponse struct {
 	Users      []UserResponse `json:"users"`
 	Total      int64          `json:"total"`
@@ -18,13 +16,11 @@ type PaginatedUsersResponse struct {
 	TotalPages int            `json:"total_pages"`
 }
 
-// AllUsersCacheResponse represents all users cached data
 type AllUsersCacheResponse struct {
 	Users []UserResponse `json:"users"`
 	Total int64          `json:"total"`
 }
 
-// ArmstrongWithUserResponse represents Armstrong number with user info
 type ArmstrongWithUserResponse struct {
 	ArmstrongID uint   `json:"armstrong_id"`
 	Number      string `json:"number"`
@@ -35,7 +31,6 @@ type ArmstrongWithUserResponse struct {
 	CreatedAt   string `json:"created_at"`
 }
 
-// ArmstrongResponse represents Armstrong number in API responses
 type ArmstrongResponse struct {
 	ArmstrongID uint   `json:"armstrong_id"`
 	Number      string `json:"number"`

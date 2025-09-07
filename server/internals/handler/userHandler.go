@@ -10,7 +10,6 @@ import (
 )
 
 func GetAllUsers(c *gin.Context) {
-	// Parse pagination parameters
 	pageStr := c.DefaultQuery("page", "1")
 
 	page, err := strconv.Atoi(pageStr)
@@ -19,7 +18,6 @@ func GetAllUsers(c *gin.Context) {
 		return
 	}
 
-	// Get paginated users (limit is always 10)
 	response, err := services.GetAllUsers(page)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

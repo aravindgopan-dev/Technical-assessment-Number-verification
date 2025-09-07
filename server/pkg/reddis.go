@@ -26,10 +26,9 @@ func ConnectRedis() {
 		log.Fatalf("Failed to parse Redis URL: %v", err)
 	}
 
-	// Configure connection pool for better performance
-	opt.PoolSize = 20    // Maximum number of connections
-	opt.MinIdleConns = 5 // Minimum number of idle connections
-	opt.MaxRetries = 3   // Maximum number of retries
+	opt.PoolSize = 20
+	opt.MinIdleConns = 5
+	opt.MaxRetries = 3
 	opt.DialTimeout = 5 * time.Second
 	opt.ReadTimeout = 3 * time.Second
 	opt.WriteTimeout = 3 * time.Second
@@ -37,7 +36,6 @@ func ConnectRedis() {
 
 	RedisClient = redis.NewClient(opt)
 
-	// Test connection with PING
 	pong, err := RedisClient.Ping(ctx).Result()
 	if err != nil {
 		log.Fatalf("Could not connect to Redis: %v", err)

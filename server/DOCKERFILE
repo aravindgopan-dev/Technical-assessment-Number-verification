@@ -4,9 +4,6 @@ FROM golang:1.24.3-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Install git and ca-certificates (needed for go mod download)
-RUN apk add --no-cache git ca-certificates
-
 # Copy go mod and sum files
 COPY go.mod go.sum ./
 
@@ -17,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/server
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/server
 
 # Final stage
 FROM alpine:latest
@@ -25,12 +22,12 @@ FROM alpine:latest
 # Install ca-certificates for HTTPS requests
 RUN apk --no-cache add ca-certificates
 
-# Create non-root user
+# Create non-root user and home directory
 RUN addgroup -g 1001 -S appgroup && \
-    adduser -u 1001 -S appuser -G appgroup
+    adduser -u 1001 -S appuser -G appgroup -h /home/appuser
 
-# Set working directory
-WORKDIR /root/
+# Set working directory to user's home
+WORKDIR /home/appuser
 
 # Copy the binary from builder stage
 COPY --from=builder /app/main .
@@ -39,7 +36,7 @@ COPY --from=builder /app/main .
 COPY .env* ./
 
 # Change ownership to non-root user
-RUN chown -R appuser:appgroup /root/
+RUN chown -R appuser:appgroup /home/appuser
 
 # Switch to non-root user
 USER appuser

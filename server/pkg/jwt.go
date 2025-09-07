@@ -16,7 +16,7 @@ type Claims struct {
 func GenerateJWT(userID string) (string, error) {
 	secretKey := os.Getenv("JWT_SECRET")
 	if secretKey == "" {
-		secretKey = "default-secret-key" // fallback for development
+		secretKey = "default-secret-key"
 	}
 
 	claims := &Claims{
@@ -40,7 +40,7 @@ func GenerateJWT(userID string) (string, error) {
 func ValidateJWT(tokenString string) (*Claims, error) {
 	secretKey := os.Getenv("JWT_SECRET")
 	if secretKey == "" {
-		secretKey = "default-secret-key" // fallback for development
+		secretKey = "default-secret-key"
 	}
 
 	claims := &Claims{}
