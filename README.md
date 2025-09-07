@@ -14,7 +14,7 @@
 
 ## 🌐 Live Application
 
-**🚀 Deployed Application:** [http://ec2-52-23-201-90.compute-1.amazonaws.com](http://ec2-52-23-201-90.compute-1.amazonaws.com)
+**🚀 Deployed Backend Application:** [http://ec2-52-23-201-90.compute-1.amazonaws.com](http://ec2-52-23-201-90.compute-1.amazonaws.com)
 
 *Deployed using Docker container with Nginx reverse proxy on port 80 forwarding to localhost:10000*
 
